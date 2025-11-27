@@ -10,10 +10,10 @@ wheels/
 .venv
 .env
 
-temp/
-data/
-scratch/
-models/
+/temp/
+/data/
+/scratch/
+/models/
 
 .obsidian
 .langgraph_api

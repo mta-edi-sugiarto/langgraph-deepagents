@@ -23,17 +23,17 @@ class AgentSession:
     async def chat(self, text: str) -> str:
         """Run a single turn and update internal state."""
         async with self._lock:
-            input_state: dict[str, Any] = {
-                "messages": self._state.messages + [HumanMessage(content=text)],
-                "user_name": self._state.user_name,
-            }
+            base_state = dict(self._state)
 
-            new_state: CustomState = await agent_runnable.ainvoke(input_state)
+            base_state["messages"] = base_state.get("messages", []) + [
+                HumanMessage(content=text)
+            ]
+            new_state: CustomState = await agent_runnable.ainvoke(base_state)
             self._state = new_state
 
             # extract last AI message
             reply = ""
-            for msg in reversed(new_state.messages):
+            for msg in reversed(new_state["messages"]):
                 if msg.type == "ai" or msg.__class__.__name__.lower().startswith(
                     "aimessage"
                 ):

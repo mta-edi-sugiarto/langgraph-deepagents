@@ -3,13 +3,15 @@ import asyncio
 from typing import Any
 
 from langchain_core.messages import HumanMessage
+from langchain_core.runnables import Runnable
 
-from src.agents.stateful_deep_agent import CustomState, agent_runnable
+from agents.stateful_agent import CustomState
 
 
 class AgentSession:
-    def __init__(self, session_id: str):
+    def __init__(self, session_id: str, agent_runnable: Runnable):
         self.session_id = session_id
+        self.agent_runnable = agent_runnable
         self._state: CustomState = CustomState(
             messages=[],
             user_name=None,
@@ -28,7 +30,7 @@ class AgentSession:
             base_state["messages"] = base_state.get("messages", []) + [
                 HumanMessage(content=text)
             ]
-            new_state: CustomState = await agent_runnable.ainvoke(base_state)
+            new_state: CustomState = await self.agent_runnable.ainvoke(base_state)
             self._state = new_state
 
             # extract last AI message

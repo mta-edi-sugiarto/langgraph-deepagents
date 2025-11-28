@@ -1,6 +1,7 @@
 import uuid
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
+from langchain_core.runnables import Runnable
 
 from app.models.agents import (
     ChatRequest,
@@ -9,17 +10,21 @@ from app.models.agents import (
     CreateAgentResponse,
     ListAgentsResponse,
 )
+from app.server.dependencies import get_agent_runnable
 from src.session import AgentSession
 
 router = APIRouter()
+
 
 AGENTS: dict[str, AgentSession] = {}
 
 
 @router.post("/agents", response_model=CreateAgentResponse)
-async def create_agent_endpoint(body: CreateAgentRequest):
+async def create_agent_endpoint(
+    body: CreateAgentRequest, agent_runnable: Runnable = Depends(get_agent_runnable)
+):
     agent_id = str(uuid.uuid4())
-    AGENTS[agent_id] = AgentSession(session_id=agent_id)
+    AGENTS[agent_id] = AgentSession(session_id=agent_id, agent_runnable=agent_runnable)
     return CreateAgentResponse(agent_id=agent_id)
 
 

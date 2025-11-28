@@ -3,15 +3,18 @@ import asyncio
 import os
 from pprint import pprint
 
-from deepagents import create_deep_agent
+# from deepagents import create_deep_agent
 from dotenv import load_dotenv
-
-# from langchain.agents import AgentState, create_agent
+from langchain.agents import AgentState, create_agent
 from langchain.messages import HumanMessage, ToolMessage
 from langchain.tools import ToolRuntime, tool
 from langchain_core.messages import AIMessage, ToolMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.types import Command
+
+
+class CustomState(AgentState):
+    user_name: str | None = None
 
 
 @tool
@@ -24,7 +27,7 @@ def get_user_info(runtime: ToolRuntime) -> str:
 @tool
 def update_user_info(
     name: str,
-    runtime: ToolRuntime,
+    runtime: ToolRuntime[CustomState],
 ) -> Command:
     """Update the user's name in state. This has to be run when the user is declaring their identity.
 
@@ -46,7 +49,7 @@ def update_user_info(
 
 
 @tool
-def diagnose_user(runtime: ToolRuntime) -> str | Command:
+def diagnose_user(runtime: ToolRuntime[CustomState]) -> str | Command:
     """Look up a diagnosis based on the current user_name in state."""
     user_name = runtime.state.get("user_name", None)
 
@@ -85,10 +88,11 @@ def create_agent_runnable(google_api_key: str):
         convert_system_message_to_human=True,
         google_api_key=google_api_key,
     )
-    agent_runnable = create_deep_agent(
+    agent_runnable = create_agent(
         model=model,
         system_prompt=system_prompt,
         tools=[update_user_info, diagnose_user, get_user_info],
+        state_schema=CustomState,
     )
     return agent_runnable
 
@@ -101,7 +105,7 @@ if __name__ == "__main__":
         print("=== Stateful CLI Agent ===")
         print("Type your message, or 'exit' to quit.\n")
 
-        current_state = None
+        current_state: CustomState | None = None
         message_offset = 0  # how many messages we have already printed
         prev_non_message_state: dict = {}
 
@@ -137,7 +141,7 @@ if __name__ == "__main__":
 
             print("\n--- Agent thinking... ---")
 
-            last_state = None
+            last_state: CustomState | None = None
 
             # --- Stream this turn step-by-step ---
             async for state in agent_runnable.astream(base_state, stream_mode="values"):

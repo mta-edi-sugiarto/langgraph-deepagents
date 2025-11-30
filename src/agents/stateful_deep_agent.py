@@ -199,7 +199,7 @@ if __name__ == "__main__":
                 prev_non_message_state = non_message_state
             print("--- Turn end ---\n")
 
-    agent = create_agent_runnable(os.getenv("GOOGLE_API_KEY"))
+    agent, _ = create_agent_runnable(os.getenv("GOOGLE_API_KEY"))
     asyncio.run(chat_cli(agent))
 
     print("----End----")

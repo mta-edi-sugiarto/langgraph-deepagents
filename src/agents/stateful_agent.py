@@ -189,5 +189,5 @@ if __name__ == "__main__":
 
             print("--- Turn end ---\n")
 
-    agent = create_agent_runnable(os.getenv("GOOGLE_API_KEY"))
+    agent, _ = create_agent_runnable(os.getenv("GOOGLE_API_KEY"))
     asyncio.run(chat_cli(agent))

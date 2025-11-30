@@ -71,3 +71,11 @@ For information on how to debug the agents directly from the command line, see t
 ## Documentation
 
 For more detailed information about the project, see the [documentation](docs/).
+
+## Testing
+
+To run the test suite, use the following command:
+
+```bash
+pytest
+```

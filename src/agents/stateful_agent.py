@@ -2,13 +2,14 @@
 import asyncio
 import os
 from pprint import pprint
+from typing import Tuple
 
-# from deepagents import create_deep_agent
 from dotenv import load_dotenv
 from langchain.agents import AgentState, create_agent
 from langchain.messages import HumanMessage, ToolMessage
 from langchain.tools import ToolRuntime, tool
 from langchain_core.messages import AIMessage, ToolMessage
+from langchain_core.runnables import Runnable
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.types import Command
 
@@ -80,7 +81,7 @@ You are an assistant which can look up user info and their diagnosis.
 """
 
 
-def create_agent_runnable(google_api_key: str):
+def create_agent_runnable(google_api_key: str) -> Tuple[Runnable, str]:
     model = ChatGoogleGenerativeAI(
         model="gemini-2.5-flash",
         temperature=0,
@@ -94,7 +95,7 @@ def create_agent_runnable(google_api_key: str):
         tools=[update_user_info, diagnose_user, get_user_info],
         state_schema=CustomState,
     )
-    return agent_runnable
+    return agent_runnable, "agent"
 
 
 if __name__ == "__main__":

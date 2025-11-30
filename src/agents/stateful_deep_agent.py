@@ -3,6 +3,7 @@ import asyncio
 import os
 import uuid
 from pprint import pprint
+from typing import Tuple
 
 from deepagents import create_deep_agent
 from deepagents.backends import StateBackend
@@ -12,7 +13,7 @@ from langchain.agents.middleware import AgentMiddleware
 from langchain.messages import HumanMessage, ToolMessage
 from langchain.tools import ToolRuntime, tool
 from langchain_core.messages import AIMessage, ToolMessage
-from langchain_core.runnables import RunnableConfig
+from langchain_core.runnables import Runnable, RunnableConfig
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph.state import CompiledStateGraph
@@ -91,7 +92,7 @@ You are an assistant which can look up user info and their diagnosis.
 """
 
 
-def create_agent_runnable(google_api_key: str) -> CompiledStateGraph:
+def create_agent_runnable(google_api_key: str) -> Tuple[Runnable, str]:
     model = ChatGoogleGenerativeAI(
         model="gemini-2.5-flash",
         temperature=0,
@@ -106,7 +107,7 @@ def create_agent_runnable(google_api_key: str) -> CompiledStateGraph:
         middleware=[CustomStateMiddleware()],
         checkpointer=MemorySaver(),
     )
-    return agent_runnable
+    return agent_runnable, "deepagent"
 
 
 if __name__ == "__main__":

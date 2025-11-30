@@ -17,3 +17,6 @@ wheels/
 
 .obsidian
 .langgraph_api
+.vscode
+
+discussion.md

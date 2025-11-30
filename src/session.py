@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Optional
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
 from langchain_core.runnables import Runnable
 
-from agents.stateful_agent import CustomState
+from src.agents.stateful_agent import CustomState
 
 
 class AgentSession:

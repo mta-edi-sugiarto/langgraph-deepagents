@@ -32,3 +32,7 @@ Both command-line interfaces are designed to stream the agent's output step-by-s
 - **State updates**: Changes to the agent's internal state.
 
 This detailed, real-time feedback is invaluable for understanding how the agent processes information and makes decisions.
+
+## Exiting the CLI
+
+To exit the interactive chat session, you can type `exit` or `quit`, or press `Ctrl+C`.

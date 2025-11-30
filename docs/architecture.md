@@ -32,6 +32,7 @@ The application is designed with a clear separation of concerns, dividing the co
 │   ├── api_reference.md
 │   ├── data_models.md
 │   └── agent_management.md
+│   └── cli_debugging.md
 ├── src
 │   ├── agents
 │   │   ├── stateful_agent.py

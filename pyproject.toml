@@ -1,5 +1,5 @@
 [project]
-name = "langgraph-deepagents"
+name = "langgraph-agentserver"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"

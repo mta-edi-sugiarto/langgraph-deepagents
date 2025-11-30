@@ -1,8 +1,7 @@
 from functools import lru_cache
 
-from langchain_core.runnables import Runnable
-
-from agents.stateful_agent import create_agent_runnable
+from app.core.agent_factory import agent_factory
+from app.core.session_manager import SessionManager, session_manager
 from app.server.config import Settings
 
 
@@ -11,6 +10,9 @@ def get_settings() -> Settings:
     return Settings()
 
 
-def get_agent_runnable() -> Runnable:
-    settings = get_settings()
-    return create_agent_runnable(settings.GOOGLE_API_KEY)
+def get_agent_factory():
+    return agent_factory
+
+
+def get_session_manager() -> SessionManager:
+    return session_manager

@@ -2,8 +2,7 @@ from pydantic import BaseModel
 
 
 class CreateAgentRequest(BaseModel):
-    # you could add tenant_id, initial_user_name, etc.
-    pass
+    agent_template: str
 
 
 class CreateAgentResponse(BaseModel):
